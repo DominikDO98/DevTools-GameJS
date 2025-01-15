@@ -15,6 +15,8 @@ export class MongoConnection {
       .connect(process.env.MONGODB_URI)
       .then(() => {
         this.connection = mongoose.connection.useDb(process.env.MONGODB_DB);
+        console.log(this.connection.db?.databaseName);
+
         console.log("Connection to mongo database established...");
       })
       .catch((e) => {
