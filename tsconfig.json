@@ -60,11 +60,11 @@
     "stripInternal": true,
     "sourceMap": false,
     "target": "ESNext",
-    "types": ["node"],
+    "types": ["node", "jest"],
     "useDefineForClassFields": true,
     "useUnknownInCatchVariables": true,
     "verbatimModuleSyntax": false
   },
-  "exclude": ["node_modules, __tests__"],
+  "exclude": ["node_modules"],
   "include": ["src/**/*.ts", "env.d.ts"]
 }
