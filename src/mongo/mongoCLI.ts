@@ -17,7 +17,7 @@ export class MongoCLI {
       .catch((e) => {
         console.error(e);
       })
-      .finally(() => this._database.disconnect());
+      .finally(async () => await this._database.disconnect());
   }
 
   private async fillWithData() {
@@ -25,11 +25,7 @@ export class MongoCLI {
       .model("User", userSchema, "users")
       .create({ username: "user1" })
       .then(async (user) => {
-        console.log(user.db.db?.databaseName);
-
         console.log("User created");
-        console.log(this._database.connection.db?.databaseName);
-
         return this._database.connection
           .model("Score", scoreSchema, "scores")
           .create({
