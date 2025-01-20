@@ -10,13 +10,12 @@ export class MongoConnection {
   get connection(): Connection {
     return this._connection;
   }
+
   async init() {
     return mongoose
       .connect(process.env.MONGODB_URI)
       .then(() => {
         this.connection = mongoose.connection.useDb(process.env.MONGODB_DB);
-        console.log(this.connection.db?.databaseName);
-
         console.log("Connection to mongo database established...");
       })
       .catch((e) => {
@@ -24,14 +23,14 @@ export class MongoConnection {
       });
   }
 
-  disconnect() {
-    mongoose
+  async disconnect() {
+    return mongoose
       .disconnect()
       .then(() => {
+        this.connection = mongoose.connection;
         console.log("Disconnected from DB");
       })
       .catch((e) => {
-        this._connection = mongoose.connection;
         console.error("Can't disconnect from mongo server", e);
       });
   }
