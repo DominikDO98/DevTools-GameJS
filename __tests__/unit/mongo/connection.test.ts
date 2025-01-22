@@ -1,4 +1,4 @@
-import { MongoConnection } from "../../../mongo/connection";
+import { MongoConnection } from "../../../src/mongo/connection";
 import mongoose from "mongoose";
 
 describe("MongoConnection", () => {
@@ -11,8 +11,7 @@ describe("MongoConnection", () => {
       .mockImplementation((uri: string, options?: mongoose.ConnectOptions) => {
         return new Promise((resolve) => {
           setTimeout(() => {
-            console.log(uri);
-            console.log(options);
+            console.log(uri, options);
             resolve(new mongoose.Mongoose());
           }, 200);
         });
@@ -43,7 +42,7 @@ describe("MongoConnection", () => {
       });
     });
     it("MongoConnect calls disconnect", async () => {
-      mongoConn.disconnect();
+      await mongoConn.disconnect();
       expect(mongoose.disconnect).toHaveBeenCalledTimes(1);
     });
   });

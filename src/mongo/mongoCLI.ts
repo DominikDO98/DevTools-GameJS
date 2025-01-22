@@ -1,5 +1,5 @@
+import { MongoConnection } from "./connection";
 import { scoreSchema, userSchema } from "./schmas";
-import { MongoConnection } from "mongo/connection";
 
 export class MongoCLI {
   private _database = new MongoConnection();

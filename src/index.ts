@@ -1,4 +1,4 @@
-import { MongoCLI } from "mongo/mongoCLI";
+import { MongoCLI } from "./mongo/mongoCLI";
 
 class CLI {
   private _mongo = new MongoCLI();
