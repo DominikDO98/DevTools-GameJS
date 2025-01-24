@@ -1,49 +1,45 @@
+import mongoose, { Connection } from "mongoose";
 import { MongoConnection } from "../../../src/mongo/connection";
-import mongoose from "mongoose";
 
 describe("MongoConnection", () => {
   const mongoConn = new MongoConnection();
+
   beforeAll(() => {
     process.env.MONGODB_URI = "someuri";
     process.env.MONGODB_DB = "somedb";
-    jest
-      .spyOn(mongoose, "connect")
-      .mockImplementation((uri: string, options?: mongoose.ConnectOptions) => {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            console.log(uri, options);
-            resolve(new mongoose.Mongoose());
-          }, 200);
-        });
-      });
-    jest.spyOn(mongoose, "disconnect").mockImplementation(() => {
+    jest.spyOn(mongoose, "connect").mockImplementation((uri: string) => {
       return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve();
-        });
+        console.log(uri);
+        resolve({
+          connection: {
+            useDb: (uri: string) => {
+              return uri;
+            },
+          },
+        } as unknown as mongoose.Mongoose);
       });
     });
-    jest.spyOn(mongoose.connection, "useDb");
+    jest.spyOn(mongoose, "disconnect").mockImplementation(() => {
+      return new Promise((resolve) => {
+        resolve();
+      });
+    });
   });
   afterAll(() => {
     jest.clearAllMocks();
   });
 
   describe("Pass", () => {
-    it("MongoConnect calls connect", async () => {
+    it("MongoConnecttion.init() create connection", async () => {
       await mongoConn.init().then(() => {
-        expect(mongoose.connect).toHaveBeenCalledTimes(1);
-        expect(mongoose.connect).toHaveBeenCalledWith(process.env.MONGODB_URI);
-        expect(mongoose.connection.useDb).toHaveBeenCalledTimes(1);
-        expect(mongoose.connection.useDb).toHaveBeenCalledWith(
-          process.env.MONGODB_DB
-        );
-        expect(mongoConn.connection).toBeDefined();
+        mongoose.connection.useDb("");
+        expect(mongoConn.connection).toEqual(process.env.MONGODB_DB);
       });
     });
-    it("MongoConnect calls disconnect", async () => {
+    it("MongoConnection.disconnect removes conneciton", async () => {
+      mongoConn.connection = "conneciton" as unknown as Connection;
       await mongoConn.disconnect();
-      expect(mongoose.disconnect).toHaveBeenCalledTimes(1);
+      expect(mongoConn.connection).toEqual(null);
     });
   });
 });

@@ -2,20 +2,20 @@ import "dotenv/config";
 import mongoose, { Connection } from "mongoose";
 
 export class MongoConnection {
-  private _connection: Connection = mongoose.connection;
+  private _connection: Connection | null = null;
 
   set connection(connection) {
     this._connection = connection;
   }
-  get connection(): Connection {
+  get connection(): Connection | null {
     return this._connection;
   }
 
   async init() {
     return mongoose
       .connect(process.env.MONGODB_URI)
-      .then(() => {
-        this.connection = mongoose.connection.useDb(process.env.MONGODB_DB);
+      .then((mongo) => {
+        this.connection = mongo.connection.useDb(process.env.MONGODB_DB);
         console.log("Connection to mongo database established...");
       })
       .catch((e) => {
@@ -27,7 +27,7 @@ export class MongoConnection {
     return mongoose
       .disconnect()
       .then(() => {
-        this.connection = mongoose.connection;
+        this.connection = null;
         console.log("Disconnected from DB");
       })
       .catch((e) => {

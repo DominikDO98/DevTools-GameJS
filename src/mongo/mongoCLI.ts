@@ -19,15 +19,18 @@ export class MongoCLI {
       })
       .finally(async () => await this._database.disconnect());
   }
-
+  private checkConn() {
+    if (!this._database.connection) throw Error("No connection!");
+  }
   private async fillWithData() {
-    return this._database.connection
-      .model("User", userSchema, "users")
+    this.checkConn();
+    return this._database
+      .connection!.model("User", userSchema, "users")
       .create({ username: "user1" })
       .then(async (user) => {
         console.log("User created");
-        return this._database.connection
-          .model("Score", scoreSchema, "scores")
+        return this._database
+          .connection!.model("Score", scoreSchema, "scores")
           .create({
             userId: user._id,
             score: 404,
@@ -39,8 +42,9 @@ export class MongoCLI {
   }
 
   private async createCollection(collection: string) {
-    return this._database.connection
-      .createCollection(collection)
+    this.checkConn();
+    return this._database
+      .connection!.createCollection(collection)
       .then(() => {
         console.log(`${collection} collection created`);
       })
