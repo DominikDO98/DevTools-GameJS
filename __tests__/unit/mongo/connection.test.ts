@@ -25,6 +25,9 @@ describe("MongoConnection", () => {
       });
     });
   });
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
   afterAll(() => {
     jest.clearAllMocks();
   });
