@@ -4,7 +4,7 @@ import mongoose, { Connection } from "mongoose";
 export class MongoConnection {
   private _connection: Connection | null = null;
 
-  set connection(connection) {
+  set connection(connection: Connection | null) {
     this._connection = connection;
   }
   get connection(): Connection | null {
