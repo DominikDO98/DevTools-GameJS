@@ -4,12 +4,17 @@ import { scoreSchema, userSchema } from "./schmas";
 export class MongoCLI {
   private _database = new MongoConnection();
 
+  get database(): MongoConnection {
+    return this._database;
+  }
   createDB() {
     this._database
       .init()
       .then(async () => {
-        await this.createCollection("users");
-        await this.createCollection("scores");
+        await Promise.all([
+          this.createCollection("users"),
+          this.createCollection("scores"),
+        ]);
       })
       .then(async () => {
         await this.fillWithData();
