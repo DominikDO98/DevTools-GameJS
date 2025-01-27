@@ -7,7 +7,6 @@
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "alwaysStrict": true,
-    "baseUrl": "./src",
     "checkJs": false,
     "declaration": true,
     "declarationMap": false,
@@ -43,7 +42,6 @@
     "noUnusedParameters": true,
     "noPropertyAccessFromIndexSignature": false,
     "noStrictGenericChecks": false,
-    "outDir": "./dist",
     "preserveSymlinks": true,
     "pretty": true,
     "preserveConstEnums": true,
@@ -60,11 +58,14 @@
     "stripInternal": true,
     "sourceMap": false,
     "target": "ESNext",
-    "types": ["node"],
+    "types": ["node", "jest"],
     "useDefineForClassFields": true,
     "useUnknownInCatchVariables": true,
-    "verbatimModuleSyntax": false
+    "verbatimModuleSyntax": false,
+    "rootDir": "./src",
+    "baseUrl": "./src",
+    "outDir": "./dist"
   },
-  "exclude": ["node_modules, __tests__"],
+  "exclude": ["node_modules"],
   "include": ["src/**/*.ts", "env.d.ts"]
 }
